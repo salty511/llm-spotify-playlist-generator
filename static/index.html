@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Spotify Playlist Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        h1 { color: #1DB954; }
+        input, button { padding: 10px; margin: 10px 0; }
+        button { background-color: #1DB954; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #1ED760; }
+        #result { margin-top: 20px; }
+        .track { margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1>LLM Spotify Playlist Generator</h1>
+    <p>Enter a theme or mood for your playlist:</p>
+    <input type="text" id="userInput" placeholder="e.g., chill vibes for studying" size="50">
+    <button onclick="generatePlaylist()">Generate Playlist</button>
+    <div id="loading" style="display: none;">Generating playlist...</div>
+    <div id="result"></div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
