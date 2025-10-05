@@ -2,16 +2,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Button } from "react-bootstrap";
 
-interface LoginPageProps {
-  accessToken: string | null;
-}
-
-const LoginPage: React.FC<LoginPageProps> = ({ accessToken }) => {
+const LoginPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // For now, just navigate to main page
-    // Later this can be replaced with actual Spotify OAuth
+  const handleGetStarted = () => {
     navigate("/main");
   };
 
@@ -30,7 +24,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ accessToken }) => {
         <Button
           variant="success"
           size="lg"
-          onClick={handleLogin}
+          onClick={handleGetStarted}
           className="px-5 py-3"
         >
           Get Started
@@ -40,4 +34,4 @@ const LoginPage: React.FC<LoginPageProps> = ({ accessToken }) => {
   );
 };
 
-export default LoginPage
+export default LoginPage;

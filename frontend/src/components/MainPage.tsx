@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Spinner } from 'react-bootstrap';
 import PlaylistForm from './PlaylistForm';
 import ResultsDisplay from './ResultsDisplay';
-import { generatePlaylist, PlaylistResponse } from '../api/playlistApi';
+import { generatePlaylist } from '../api/playlistApi';
+import type { PlaylistResponse } from '../api/playlistApi';
 
 const MainPage: React.FC = () => {
   const [result, setResult] = useState<PlaylistResponse | null>(null);

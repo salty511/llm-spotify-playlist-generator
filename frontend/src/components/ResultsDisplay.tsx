@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, ListGroup, Badge } from 'react-bootstrap';
-import { PlaylistResponse } from '../api/playlistApi';
+import type { PlaylistResponse } from '../api/playlistApi';
 
 interface ResultsDisplayProps {
   result: PlaylistResponse | null;

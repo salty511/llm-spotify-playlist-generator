@@ -23,7 +23,7 @@ class PlaylistRequest(BaseModel):
 
 @app.post("/generate_playlist")
 def create_playlist(request: PlaylistRequest):
-    description, tracks = generate_playlist(request.user_input, )
+    description, tracks = generate_playlist(request.user_input)
     return {"description": description, "tracks": tracks}
 
 @app.get("/", response_class=HTMLResponse)
