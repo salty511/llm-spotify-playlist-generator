@@ -108,6 +108,8 @@ def auth_callback(code: str, state: str | None = None):
         "redirect_uri": SPOTIFY_REDIRECT_URI,
     }
     resp = requests.post(SPOTIFY_TOKEN_URL, data=data, headers=headers, timeout=15)
+    print(resp.status_code, resp.text)
+
     if resp.status_code != 200:
         # Redirect to frontend with error
         frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
@@ -125,7 +127,7 @@ def auth_callback(code: str, state: str | None = None):
         "scope": token_json.get("scope", ""),
     }
     query_string = "&".join(f"{k}={v}" for k, v in params.items() if v)
-    return RedirectResponse(url=f"{frontend_url}/auth/callback#{query_string}", status_code=302)
+    return RedirectResponse(url=f"{frontend_url}/#{query_string}", status_code=302)
 
 class RefreshRequest(BaseModel):
     refresh_token: str

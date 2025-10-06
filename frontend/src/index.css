@@ -49,3 +49,31 @@ a:hover {
 .app-container {
   min-height: 100%;
 }
+
+/* Custom navbar styling */
+.navbar.navbar-expand.navbar-custom {
+  background-color: #222222 !important; /* Dark grey background */
+}
+
+.navbar.navbar-expand.navbar-custom .navbar-brand {
+  color: #1db954 !important; /* Spotify green for brand */
+}
+
+.navbar.navbar-expand.navbar-custom .nav-link {
+  color: #ffffff !important; /* White text for links */
+}
+
+.navbar.navbar-expand.navbar-custom .nav-link:hover {
+  color: #1ed760 !important; /* Lighter green on hover */
+}
+
+.navbar.navbar-expand.navbar-custom .btn-outline-danger {
+  border-color: #ff4757 !important; /* Custom red for logout button */
+  color: #ff4757 !important;
+}
+
+.navbar.navbar-expand.navbar-custom .btn-outline-danger:hover {
+  background-color: #ff4757 !important;
+  color: #ffffff !important;
+}
+
