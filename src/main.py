@@ -10,15 +10,15 @@ def generate_playlist(user_input):
     print(f"Playlist Description: {description}")
     
     # Search for tracks
-    tracks = spotify.search_tracks(user_input)
-    print(f"Found tracks: {[t['name'] for t in tracks]}")
+    """ tracks = spotify.search_tracks(user_input)
+    print(f"Found tracks: {[t['name'] for t in tracks]}") """
     
     # Suggest tracks using LLM
-    suggestions = llm.suggest_tracks(description, tracks)
+    suggestions = llm.suggest_tracks(description.output[0].content[0].text)
     print(f"Suggestions: {suggestions}")
     
-    return description, tracks
+    return description, suggestions
 
 if __name__ == "__main__":
     user_input = input("Enter playlist theme: ")
-    generate_playlist(user_input)
+    generate_playlist(user_input)   

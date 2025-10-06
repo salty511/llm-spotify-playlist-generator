@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError, ValidationException, FastAPIError
 from pydantic import BaseModel
 from main import generate_playlist
+import json
 
 
 # New imports for Spotify OAuth (Authorization Code flow)
@@ -42,12 +43,16 @@ class PlaylistRequest(BaseModel):
 
 @app.post("/generate_playlist")
 def create_playlist(request: PlaylistRequest):
-    print(request)
     try:
         description, tracks = generate_playlist(request.user_input)
-        return {"description": description, "tracks": tracks}
+        print(tracks)
+        tracks = json.loads(tracks.output[0].content[0].text)
+        print(tracks)
+        return {"description": description.output[0].content[0].text, "tracks": tracks}
     except Exception as e:
+        print(f"Error generating playlist: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 # =========================
 # Spotify OAuth (Auth Code)

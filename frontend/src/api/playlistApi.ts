@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { Form } from 'react-router-dom';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -10,18 +9,14 @@ export interface PlaylistRequest {
 export interface Track {
   name: string;
   artist: string;
-  uri: string;
 }
 
 export interface PlaylistResponse {
-  description: string;
+  description: string | any;
   tracks: Track[];
 }
 
 export const generatePlaylist = async (userInput: string): Promise<PlaylistResponse> => {
-  console.log(userInput)
-  const bodyFormData = new FormData();
-  bodyFormData.append('user_input', userInput);
   try {
     const response = await axios.post<PlaylistResponse>(
       `${API_BASE_URL}/generate_playlist`,

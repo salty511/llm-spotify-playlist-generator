@@ -9,6 +9,8 @@ interface ResultsDisplayProps {
 const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result }) => {
   if (!result) return null;
 
+  console.log(result);
+
   return (
     <div className="mt-4">
       <Card className="shadow-sm">
@@ -32,9 +34,6 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result }) => {
                 <br />
                 <small className="text-muted">by {track.artist}</small>
               </div>
-              <Badge bg="secondary" pill>
-                {index + 1}
-              </Badge>
             </ListGroup.Item>
           ))}
         </ListGroup>

@@ -19,7 +19,7 @@ const AppContent: React.FC = () => {
     const hash = window.location.hash.substring(1); // Remove the '#' character
     const params = new URLSearchParams(hash);
 		const parsed = params.get('access_token');
-    console.log(parsed !== null && accessToken === null)
+    console.log(parsed)
 
     if (parsed !== null && accessToken === null) {
       console.log('Setting access token from URL')
