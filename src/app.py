@@ -22,7 +22,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",   # nginx or dockerized frontend
-        "http://localhost:5173",   # Vite dev server
+        "http://127.0.0.1:5173",   # Vite dev server
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -89,11 +89,11 @@ class AuthCallbackResponse(BaseModel):
     refresh_token: str | None = None
     scope: str | None = None
 
-@app.get("/auth/callback", response_model=AuthCallbackResponse)
+@app.get("/auth/callback")
 def auth_callback(code: str, state: str | None = None):
     """
     Spotify redirects here with ?code= and optional ?state=. Exchange code for tokens.
-    Returns access_token, refresh_token, expires_in, token_type, scope.
+    Redirects to frontend with tokens in URL fragment for security.
     """
     if not SPOTIFY_CLIENT_ID or not SPOTIFY_CLIENT_SECRET or not SPOTIFY_REDIRECT_URI:
         return JSONResponse(status_code=500, content={"detail": "Spotify OAuth is not configured. Check environment variables."})
@@ -109,9 +109,23 @@ def auth_callback(code: str, state: str | None = None):
     }
     resp = requests.post(SPOTIFY_TOKEN_URL, data=data, headers=headers, timeout=15)
     if resp.status_code != 200:
-        return JSONResponse(status_code=resp.status_code, content={"detail": resp.text})
+        # Redirect to frontend with error
+        frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+        return RedirectResponse(url=f"{frontend_url}/auth/error?error=oauth_failed", status_code=302)
+
     token_json = resp.json()
-    return token_json
+
+    # Redirect to frontend with tokens in URL fragment
+    frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+    params = {
+        "access_token": token_json["access_token"],
+        "token_type": token_json["token_type"],
+        "expires_in": str(token_json["expires_in"]),
+        "refresh_token": token_json.get("refresh_token", ""),
+        "scope": token_json.get("scope", ""),
+    }
+    query_string = "&".join(f"{k}={v}" for k, v in params.items() if v)
+    return RedirectResponse(url=f"{frontend_url}/auth/callback#{query_string}", status_code=302)
 
 class RefreshRequest(BaseModel):
     refresh_token: str

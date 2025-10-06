@@ -1,14 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Button } from "react-bootstrap";
+import { redirectToLogin } from "../api/loginAPI";
 
 
 const LoginPage: React.FC = ({ accessToken }) => {
-  const authUrl = import.meta.env.VITE_LOGIN_URL || "http://localhost:9000/.netlify/functions/api/login"
-  const navigate = useNavigate();
-
   const handleLogin = () => {
-    navigate(authUrl);
+    redirectToLogin();
   };
 
   return (
