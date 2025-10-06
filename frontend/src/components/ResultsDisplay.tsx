@@ -22,7 +22,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result }) => {
           </Card.Text>
         </Card.Body>
         <ListGroup variant="flush">
-          <ListGroup.Item className="bg-light">
+          <ListGroup.Item className="bg-body-tertiary">
             <strong>Suggested Tracks ({result.tracks.length})</strong>
           </ListGroup.Item>
           {result.tracks.map((track, index) => (

@@ -2,36 +2,33 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Button } from "react-bootstrap";
 
-const LoginPage: React.FC = () => {
+
+const LoginPage: React.FC = ({ accessToken }) => {
+  const authUrl = import.meta.env.VITE_LOGIN_URL || "http://localhost:9000/.netlify/functions/api/login"
   const navigate = useNavigate();
 
-  const handleGetStarted = () => {
-    navigate("/main");
+  const handleLogin = () => {
+    navigate(authUrl);
   };
 
   return (
-    <Container className="py-5">
-      <div className="text-center">
-        <h1 className="display-3 text-success mb-4">🎵 LLM Spotify Playlist Generator</h1>
-        <p className="lead text-muted mb-4">
-          Create personalized playlists using AI. Just describe your mood or activity!
-        </p>
+    <Container style={{paddingTop: "30px", textAlign: "left"}}>
+      <h1 className="display-3">Welcome to DJ-GPT</h1>
+      <p className="lead">This website uses the OpenAI & Spotify API to generate playlists from natural language prompts</p>
         <hr className="my-4" />
-        <p className="mb-4">
-          Experience the power of AI-driven music curation. Our system uses advanced language models
-          to understand your preferences and generate perfect playlists from Spotify's vast library.
-        </p>
-        <Button
-          variant="success"
-          size="lg"
-          onClick={handleGetStarted}
-          className="px-5 py-3"
-        >
-          Get Started
-        </Button>
-      </div>
+        <p>It uses the Spotify API to access account data such as your Top Tracks & Artists, You can login to Spotify here</p>
+        <p className="lead">
+            {!accessToken ?
+                <Button 
+                className="btn-success btn-lg px-3 py-2" 
+                onClick={handleLogin}
+              >
+                Login with Spotify
+              </Button>
+            : <p>Already Logged in</p>}
+      </p>
     </Container>
-  );
+  )
 };
 
 export default LoginPage;

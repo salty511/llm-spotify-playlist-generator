@@ -26,7 +26,7 @@ const MainPage: React.FC = () => {
   };
 
   return (
-    <div style={{ backgroundColor: '#f8f9fa', minHeight: '100vh', paddingTop: '2rem' }}>
+    <div className="app-container py-4">
       <Container>
         <Row className="justify-content-center">
           <Col md={8} lg={6}>
