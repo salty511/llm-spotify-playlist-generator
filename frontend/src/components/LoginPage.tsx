@@ -1,10 +1,11 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { Container, Button } from "react-bootstrap";
 import { redirectToLogin } from "../api/loginAPI";
+import { useStore } from '../store/useStore'
 
+const LoginPage: React.FC = () => {
+  const { accessToken } = useStore()
 
-const LoginPage: React.FC = ({ accessToken }) => {
   const handleLogin = () => {
     redirectToLogin();
   };

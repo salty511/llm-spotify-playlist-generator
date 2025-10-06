@@ -1,9 +1,11 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.exceptions import RequestValidationError, ValidationException, FastAPIError
 from pydantic import BaseModel
 from main import generate_playlist
+
 
 # New imports for Spotify OAuth (Authorization Code flow)
 import os
@@ -12,6 +14,9 @@ import secrets
 import requests
 from urllib.parse import urlencode
 from dotenv import load_dotenv
+
+import fastapi.exceptions
+print(fastapi.exceptions)
 
 load_dotenv()
 
@@ -22,6 +27,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",   # nginx or dockerized frontend
+        "http://localhost:5173",   # Vite dev server
         "http://127.0.0.1:5173",   # Vite dev server
     ],
     allow_credentials=True,
@@ -32,12 +38,16 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 class PlaylistRequest(BaseModel):
-    user_input: str
+    user_input: str | None = None
 
 @app.post("/generate_playlist")
 def create_playlist(request: PlaylistRequest):
-    description, tracks = generate_playlist(request.user_input)
-    return {"description": description, "tracks": tracks}
+    print(request)
+    try:
+        description, tracks = generate_playlist(request.user_input)
+        return {"description": description, "tracks": tracks}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # =========================
 # Spotify OAuth (Auth Code)

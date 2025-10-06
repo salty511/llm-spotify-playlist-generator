@@ -57,7 +57,7 @@ const AppContent: React.FC = () => {
               ) : (
                 <LoginPage />
               )
-            } 
+            }
           />
         {/* About route */}
         <Route path="/about" element={<AboutPage />} />

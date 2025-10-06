@@ -10,31 +10,6 @@ const MainPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleAuthCallback = () => {
-    // This function grabs the tokens from the URL and stores them in localStorage
-    try {
-      const hash = window.location.hash.substring(1); // Remove the '#' character
-      const params = new URLSearchParams(hash);
-
-      const tokens = {
-        access_token: params.get('access_token'),
-        token_type: params.get('token_type'),
-        expires_in: params.get('expires_in'),
-        refresh_token: params.get('refresh_token'),
-        scope: params.get('scope'),
-      };
-
-      if (tokens.access_token) {
-        localStorage.setItem('spotify_tokens', JSON.stringify(tokens));
-        window.history.replaceState({}, document.title, window.location.pathname); // Clean URL
-      } else {
-        throw new Error('No access token found in URL');
-      }
-    } catch (error) {
-      console.error('Auth callback error:', error);
-    }
-  };
-
   const handleGeneratePlaylist = async (userInput: string) => {
     setLoading(true);
     setError(null);

@@ -20,14 +20,11 @@ const NavBar: React.FC = () => {
 			<Nav className="me-auto" style={{ paddingTop: '3px' }}>
 				<Link to="/" className="nav-link">
 					{accessToken ? 'Home' : 'Login'}
-		            	</Link>
-					{accessToken && (
-				<>
-					<Link to="/about" className="nav-link">
-						About
-					</Link>
-				</>
-				)}
+				</Link>	
+				
+				<Link to="/about" className="nav-link">
+					About
+				</Link>
 			</Nav>
 			<Nav>
 				{accessToken && (
