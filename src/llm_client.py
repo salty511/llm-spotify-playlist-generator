@@ -26,7 +26,7 @@ class LLMClient:
 		if user_track_list:
 			promptTracks = f'\nUse these tracks as inspiration:\n'
 			for trackObj in user_track_list.values():
-				promptTracks += f'Track: {trackObj['name']} - Artist: {trackObj['artist']}\n'
+				promptTracks += f"Track: {trackObj['name']} - Artist: {trackObj['artist']}\n"
 
 			prompt = self.textWrapper(promptDesc) + self.textWrapper(promptTracks)	
 		else:
@@ -46,7 +46,7 @@ class LLMClient:
 		if user_track_list:
 			promptTracks = f'Use these tracks as inspiration and include them in the final playlist:\n'
 			for trackObj in user_track_list.values():
-				promptTracks += f'Track: {trackObj['name']} - Artist: {trackObj['artist']}\n'
+				promptTracks += f"Track: {trackObj['name']} - Artist: {trackObj['artist']}\n"
 
 			prompt = self.textWrapper(promptDesc) + self.textWrapper(promptTracks)	
 		else:
