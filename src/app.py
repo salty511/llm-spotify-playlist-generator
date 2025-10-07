@@ -53,12 +53,15 @@ def create_playlist(request: PlaylistRequest):
     try:
         trackList = json.loads(request.user_track_list)
         description, tracks = generate_playlist(request.user_prompt, trackList, model)
-        if(tracks.output[1].content):
-            tracks = json.loads(tracks.output[1].content[0].text)
-            return {"description": description.output[1].content[0].text, "tracks": tracks}
-        elif(tracks.output[0].content):
-            tracks = json.loads(tracks.output[0].content[0].text)
-            return {"description": description.output[0].content[0].text, "tracks": tracks}
+        
+        # Search for correct output array index
+        for i, element in enumerate(tracks.output):
+            if element != None:
+                index=i
+
+        tracks = json.loads(tracks.output[index].content[0].text)
+        return {"description": description.output[index].content[0].text, "tracks": tracks}
+
 
     except Exception as e:
         print(f"Error generating playlist: {e}")

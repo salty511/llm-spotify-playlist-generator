@@ -22,11 +22,11 @@ async function getSpotifyLinks(url: string): Promise<string[]> {
   
       $('*').each((i, element) => {
         if ('attribs' in element) {
-          const attrs = element.attribs;
-          Object.values(attrs).forEach(value => {
-            if (typeof value === 'string' && value.includes('p.scdn.co')) {
-              scdnLinks.add(value);
-            }
+			const attrs = element.attribs;
+			Object.values(attrs).forEach(value => {
+				if (typeof value === 'string' && value.includes('p.scdn.co')) {
+				scdnLinks.add(value);
+			}
           });
         }
       });

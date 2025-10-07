@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class LLMClient:
-	def __init__(self, model='gpt-5-nano'):
+	def __init__(self, model):
 		self.client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 		self.model = model
 
@@ -34,7 +34,7 @@ class LLMClient:
 		
 		response = self.client.responses.create(model=self.model,
 		input=prompt,
-		max_output_tokens=10000)
+		max_output_tokens=1000000)
 		return response
 
 	def suggest_tracks(self, description, user_track_list=None):
@@ -52,10 +52,12 @@ class LLMClient:
 		else:
 			prompt = self.textWrapper(promptDesc)
 
+		print(self.model)
+
 		prompt = self.textWrapper(promptDesc) + self.textWrapper(promptTracks)
 		response = self.client.responses.create(model=self.model,
 		input=prompt,
-		max_output_tokens=100000)
+		max_output_tokens=1000000)
 		return response
 	
 	
