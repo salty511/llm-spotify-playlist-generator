@@ -7,7 +7,7 @@ interface TrackInfo {
   albumName: string;
   trackName: string;
   artistName: string;
-  image: string | null;
+  image: string;
   trackId: string;
   previewURL: string | null;
   uri: string;
@@ -17,16 +17,15 @@ interface AlbumProps {
   trackInfo: TrackInfo;
   onClickHandler: (url: string) => void;
   accessToken: string | null;
+  
 }
 
 const Album: React.FC<AlbumProps> = ({ trackInfo, onClickHandler, accessToken }) => {
   const { getCachedPreviewUrl, cachePreviewUrl } = useStore();
   const { embedTrackID, setEmbedTrackID } = useStore()
+  const { addToTrackList } = useStore()
 
   if (!accessToken) return null;
-
-  
-  
 
   const handlePreviewClick = async () => {
     try {
@@ -68,6 +67,10 @@ const Album: React.FC<AlbumProps> = ({ trackInfo, onClickHandler, accessToken })
     console.log('after set, embedTrackID:', embedTrackID)
   };
 
+  const handleTrackListClick = () => {
+    addToTrackList(trackInfo.trackName, trackInfo.image, trackInfo.trackId)
+  }
+
   return (
     <div style={{ paddingBottom: "10px" }}>
       <div className="card rounded-0">
@@ -75,6 +78,12 @@ const Album: React.FC<AlbumProps> = ({ trackInfo, onClickHandler, accessToken })
         <div className="img-preview-button">
           <img className="card-img-top" src={trackInfo.image} alt={`${trackInfo.trackName} album cover`} />
           <div className="preview-button">
+            <Button
+              className="btn-success albumButton"
+              onClick={handleTrackListClick}
+            >
+              Add to Track List
+            </Button>
             <Button
               className="btn-success albumButton"
               style={{ padding: "10px" }}

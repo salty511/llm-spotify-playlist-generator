@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Spinner } from 'react-bootstrap';
 import PlaylistForm from './PlaylistForm';
 import ResultsDisplay from './ResultsDisplay';
@@ -9,12 +9,13 @@ import { useCallback } from 'react';
 import SpotifyEmbed from '../components/SpotifyEmbed.tsx';
 import Album from './Album';
 import AudioPlayer from './AudioPlayer.tsx';
+import TrackList from './TrackList.tsx';
 
 interface ProcessedTrack {
   albumName: string;
   trackName: string;
   artistName: string;
-  image: string | null;
+  image: string;
   trackId: string;
   previewURL: string | null;
   uri: string;
@@ -50,7 +51,8 @@ const MainPage: React.FC = () => {
     setPreviewURL,
     getCurrentDataSet,
     accessToken,
-    embedTrackID
+    embedTrackID,
+    trackList
   } = useStore()
 
   const dataSet = getCurrentDataSet() as MusicData | undefined
@@ -75,7 +77,7 @@ const MainPage: React.FC = () => {
             <div key={track.trackId} className="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6 rounded-0">
               <Album 
                 trackInfo={track} 
-                onClickHandler={onClickHandler_Album} 
+                onClickHandler={onClickHandler_Album}
                 accessToken={accessToken}
               />
             </div>
@@ -147,19 +149,28 @@ const MainPage: React.FC = () => {
         <Row className="justify-content-center">
           <Col md={7} lg={7}>
             <div className="text-center mb-5 pt-4">
-              <h1 className="display-4 text-success mb-3">LLM Spotify Playlist Generator</h1>
+              <h1 className="display-4 text-success mb-3">DJ-GPT</h1>
               <p className="lead text-muted">
                 Create personalized playlists using AI. Just describe your mood or activity!
               </p>
             </div>
+          </Col>
             <Row className="justify-content-center">
-              <Col md={10}>
+              <Col md={7} lg={7}>
                 <PlaylistForm
                   onSubmit={handleGeneratePlaylist}
                   loading={loading}
                   error={error}
                 />
               </Col>
+              <Col md={7} lg={7}>
+                <h2 className="mb-3 text-success">Add Tracks For Inspiration</h2>
+                <p>Hover over album covers to play a preview of song, or add the song to the playlist for inspiration</p>
+                <TrackList trackList={trackList} />
+              </Col>
+            </Row>
+            <Row className="justify-content-center">
+              
             </Row>
             {loading && (
               <div className="text-center mt-4">
@@ -178,7 +189,6 @@ const MainPage: React.FC = () => {
               </div>
             </div>
             <ResultsDisplay result={result} />
-          </Col>
         </Row>
         <Row className="justify-content-center">
           <Col md={11} lg={11}>

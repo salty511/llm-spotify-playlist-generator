@@ -1,5 +1,10 @@
 import { create } from 'zustand'
 
+export interface trackIdObject {
+  name: string | null
+  img_url: string | null
+}
+
 interface storeState {
   // User state
   user: object | null
@@ -20,6 +25,9 @@ interface storeState {
 
   // Current track ID in embed player
   embedTrackID: string | null
+
+  // Track List
+  trackList: Map<string, trackIdObject>
   
   // Actions
   setAccessToken: (token: string) => void
@@ -30,6 +38,8 @@ interface storeState {
   setPlayStatus: (status: 'STOPPED' | 'PLAYING' | 'PAUSED') => void
   setPreviewURL: (url: string) => void
   setEmbedTrackID: (newTrackID: string) => void
+  addToTrackList: (name: string, img_url: string, track_id: string) => void
+  removeFromTrackList: (track_id: string) => void
   
   // Cache a preview URL for a track
   cachePreviewUrl: (trackId: string, previewUrl: string) => void
@@ -43,6 +53,7 @@ interface storeState {
 }
 
 type PlayStatus = storeState['playStatus']
+
 
 export const useStore = create<storeState>()((set, get) => ({
   // User state
@@ -64,13 +75,15 @@ export const useStore = create<storeState>()((set, get) => ({
 
   // Current Track ID in embed player
   embedTrackID: null,
+
+  // Track List 
+  trackList: new Map(),
   
   // Actions
   setAccessToken: (token) => set({ accessToken: token }),
   setEmbedTrackID: (newTrackID) => set({ embedTrackID: newTrackID }),
-  
   setUser: (userData) => set({ user: userData }),
-  
+
   setMusicData: (timeRange, data) => {
     switch (timeRange) {
       case 'short_term':
@@ -92,6 +105,18 @@ export const useStore = create<storeState>()((set, get) => ({
   setPlayStatus: (status: PlayStatus) => set({ playStatus: status }),
   
   setPreviewURL: (url: string) => set({ previewURL: url }),
+
+  addToTrackList: (name: string, img_url: string, track_id: string) => set((state) => {
+    const newTrackList = new Map(state.trackList)
+    newTrackList.set(track_id, {name, img_url})
+    return { ...state, trackList: newTrackList }
+  }),
+
+  removeFromTrackList: (track_id: string) => set((state) => {
+    const newTrackList = new Map(state.trackList)
+    newTrackList.delete(track_id)
+    return { ...state, trackList: newTrackList }
+  }),
   
   // Cache a preview URL for a track
   cachePreviewUrl: (trackId: string, previewUrl: string) => {
