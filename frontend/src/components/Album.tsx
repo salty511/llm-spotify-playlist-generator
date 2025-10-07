@@ -22,7 +22,6 @@ interface AlbumProps {
 
 const Album: React.FC<AlbumProps> = ({ trackInfo, onClickHandler, accessToken }) => {
   const { getCachedPreviewUrl, cachePreviewUrl } = useStore();
-  const { embedTrackID, setEmbedTrackID } = useStore()
   const { addToTrackList } = useStore()
 
   if (!accessToken) return null;
@@ -59,13 +58,13 @@ const Album: React.FC<AlbumProps> = ({ trackInfo, onClickHandler, accessToken })
     }
   };
 
-  function handlePreviewClickEmbed() {
+  /* function handlePreviewClickEmbed() {
     console.log('handlePreviewClickEmbed called for trackId:', trackInfo.trackId)
     const embedId = trackInfo.trackId
     console.log('setting embedTrackID to:', embedId)
     setEmbedTrackID(embedId)
     console.log('after set, embedTrackID:', embedTrackID)
-  };
+  }; */
 
   const handleTrackListClick = () => {
     addToTrackList(trackInfo.trackName, trackInfo.image, trackInfo.trackId)

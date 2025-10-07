@@ -9,9 +9,9 @@ interface AudioPlayerProps {
   onError?: (error: any) => void;
 }
 
-const AudioPlayer: React.FC<AudioPlayerProps> = ({ url, isPlaying, onPlay, onPause, onEnded, onError }) => {
+const AudioPlayer: React.FC<AudioPlayerProps> = ({ url, isPlaying, onEnded, onError }) => {
   const audioRef = useRef<HTMLAudioElement>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [, setIsLoading] = useState(false)
   const [currentUrl, setCurrentUrl] = useState(url)
 
   // Handle URL changes - stop current audio and prepare for new one

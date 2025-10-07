@@ -6,7 +6,6 @@ import { generatePlaylist } from '../api/playlistApi';
 import type { PlaylistResponse } from '../api/playlistApi'
 import { useStore } from '../store/useStore';
 import { useCallback } from 'react';
-import SpotifyEmbed from '../components/SpotifyEmbed.tsx';
 import Album from './Album';
 import AudioPlayer from './AudioPlayer.tsx';
 import TrackList from './TrackList.tsx';
@@ -51,7 +50,6 @@ const MainPage: React.FC = () => {
     setPreviewURL,
     getCurrentDataSet,
     accessToken,
-    embedTrackID,
     trackList
   } = useStore()
 
@@ -87,11 +85,11 @@ const MainPage: React.FC = () => {
     )
   }, [accessToken])
 
-  const renderSpotifyPlayer = useCallback(() => {
+  /* const renderSpotifyPlayer = useCallback(() => {
     console.log(`renderSpotifyPlayer called with embedTrackID: ${embedTrackID}`)
     return <SpotifyEmbed trackID={embedTrackID}/>
   }, [embedTrackID])
-
+ */
   const onClickTimeFrame = useCallback((timeFrame: "shortTerm" | "mediumTerm" | "longTerm") => {
     setCurrentDataSet(timeFrame)
   }, [setCurrentDataSet])

@@ -1,6 +1,5 @@
 import React from "react"
 import { useStore, type trackIdObject } from "../store/useStore"
-import { Button } from "react-bootstrap"
 
 const TrackList: React.FC<{trackList: Map<string, trackIdObject>}> = ({trackList}) => {
 	const { removeFromTrackList } = useStore()
@@ -15,7 +14,7 @@ const TrackList: React.FC<{trackList: Map<string, trackIdObject>}> = ({trackList
 					<div className="img-preview-button me-2" style={{position: 'relative', display: 'inline-block'}}>
 						<img src={value.img_url} alt={value.name || 'Track'} className="card-img-top" style={{width: '50px', height: '50px', objectFit: 'cover'}} />
 						<div className="preview-button" style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
-						<img className="remove-icon" src='../../public/icons8-remove-64.png' onClick={() => onclickRemove(key)}/>
+						<img className="remove-icon" src='../../icons8-remove-64.png' onClick={() => onclickRemove(key)}/>
 						</div>
 					</div>}
 					<p className="mb-0">{value.name}</p>
