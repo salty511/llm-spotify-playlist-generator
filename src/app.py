@@ -6,7 +6,7 @@ from fastapi.exceptions import RequestValidationError, ValidationException, Fast
 from pydantic import BaseModel
 from main import generate_playlist
 import json
-from typing import Annotated
+from typing import Annotated, Union
 
 
 # New imports for Spotify OAuth (Authorization Code flow)
@@ -43,10 +43,6 @@ class PlaylistRequest(BaseModel):
     user_prompt: str
     user_track_list: str
 
-class ScraperHeaders(BaseModel):
-    Url: str
-
-
 @app.post("/generate_playlist")
 def create_playlist(request: PlaylistRequest):
     model = 'gpt-5'
@@ -68,7 +64,7 @@ def create_playlist(request: PlaylistRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/scrape", response_class=HTMLResponse)
-def scrape_previews(url: Annotated[str | None, Header()] = None):
+def scrape_previews(url: Annotated[Union[str, None], Header()] = None):
     print(url)
     resp = requests.get(url)
     return resp.text
