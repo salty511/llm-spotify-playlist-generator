@@ -37,10 +37,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static") # Legacy 
 
 class PlaylistRequest(BaseModel):
-    user_input: str | None = None
+    user_prompt: str
+    user_track_list: str
 
 class ScraperHeaders(BaseModel):
     Url: str
@@ -48,12 +49,13 @@ class ScraperHeaders(BaseModel):
 
 @app.post("/generate_playlist")
 def create_playlist(request: PlaylistRequest):
+    model = 'gpt-5'
     try:
-        description, tracks = generate_playlist(request.user_input)
-        print(tracks)
-        tracks = json.loads(tracks.output[0].content[0].text)
-        print(tracks)
-        return {"description": description.output[0].content[0].text, "tracks": tracks}
+        trackList = json.loads(request.user_track_list)
+        description, tracks = generate_playlist(request.user_prompt, trackList, model)
+        if(model == 'gpt-5'):
+            tracks = json.loads(tracks.output[1].content[0].text)
+            return {"description": description.output[1].content[0].text, "tracks": tracks}
     except Exception as e:
         print(f"Error generating playlist: {e}")
         raise HTTPException(status_code=500, detail=str(e))

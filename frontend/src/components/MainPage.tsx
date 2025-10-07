@@ -9,33 +9,7 @@ import { useCallback } from 'react';
 import Album from './Album';
 import AudioPlayer from './AudioPlayer.tsx';
 import TrackList from './TrackList.tsx';
-
-interface ProcessedTrack {
-  albumName: string;
-  trackName: string;
-  artistName: string;
-  image: string;
-  trackId: string;
-  previewURL: string | null;
-  uri: string;
-}
-
-interface ProcessedArtist {
-  artistName: string;
-  genres: string[];
-}
-
-interface User {
-  userName: string;
-  profileImage: string | null;
-  followers: number;
-}
-
-interface MusicData {
-  topTracks: ProcessedTrack[];
-  topArtists: ProcessedArtist[];
-  user: User;
-}
+import type { ProcessedTrack, MusicData } from '../store/useStore';
 
 const MainPage: React.FC = () => {
   const [result, setResult] = useState<PlaylistResponse | null>(null);
@@ -50,10 +24,12 @@ const MainPage: React.FC = () => {
     setPreviewURL,
     getCurrentDataSet,
     accessToken,
-    trackList
+    trackList,
+    getCurrentTrackList,
+    getAllGenres
   } = useStore()
 
-  const dataSet = getCurrentDataSet() as MusicData | undefined
+  const dataSet = getCurrentDataSet()
 
   const handleAudioEnded = useCallback(() => {
     setPlayStatus('STOPPED')
@@ -64,7 +40,7 @@ const MainPage: React.FC = () => {
     setPlayStatus('STOPPED')
   }, [setPlayStatus])
 
-  const renderAlbums = useCallback((dataSet: MusicData | undefined) => {
+  const renderAlbums = useCallback((dataSet: MusicData | null) => {
     if (!dataSet?.topTracks) return null
     
     const albumsToRender = dataSet.topTracks
@@ -123,8 +99,12 @@ const MainPage: React.FC = () => {
     setError(null);
     setResult(null);
 
+    const trackList = getCurrentTrackList();
+    const genres = getAllGenres()
+    console.log(genres)
+
     try {
-      const playlistResult = await generatePlaylist(userInput);
+      const playlistResult = await generatePlaylist(userInput, trackList);
       setResult(playlistResult);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
@@ -161,9 +141,11 @@ const MainPage: React.FC = () => {
                   error={error}
                 />
               </Col>
-              <Col md={7} lg={7}>
-                <h2 className="mb-3 text-success">Add Tracks For Inspiration</h2>
-                <p>Hover over album covers to play a preview of song, or add the song to the playlist for inspiration</p>
+              <Col md={7} lg={7} className=''>
+                <h2 className="mb-3 text-success">Track List</h2>
+                <p>Hover over album covers to play a preview of song, or add the song to the track list, 
+                   these will be used as inspiration in creating your playlist. Remove songs by hovering over them in the track list.
+                </p>
                 <TrackList trackList={trackList} />
               </Col>
             </Row>

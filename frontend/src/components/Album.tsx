@@ -7,7 +7,7 @@ interface TrackInfo {
   albumName: string;
   trackName: string;
   artistName: string;
-  image: string;
+  image: string | null;
   trackId: string;
   previewURL: string | null;
   uri: string;
@@ -25,6 +25,20 @@ const Album: React.FC<AlbumProps> = ({ trackInfo, onClickHandler, accessToken })
   const { addToTrackList } = useStore()
 
   if (!accessToken) return null;
+
+  const chopNames = (trackInfo: TrackInfo) => {
+    const maxTopLine = 22
+    const maxBottomLine = 25
+    if (trackInfo.trackName.length >= maxTopLine) {
+          trackInfo.trackName = trackInfo.trackName.slice(0, maxTopLine - 3) + "..."
+    }
+
+    if ((trackInfo.artistName + trackInfo.albumName).length >= maxBottomLine) {
+          trackInfo.albumName = trackInfo.albumName.slice(0, (maxBottomLine - trackInfo.artistName.length - 3)) + "..."
+    }
+  }
+
+  chopNames(trackInfo)
 
   const handlePreviewClick = async () => {
     try {
@@ -67,8 +81,10 @@ const Album: React.FC<AlbumProps> = ({ trackInfo, onClickHandler, accessToken })
   }; */
 
   const handleTrackListClick = () => {
-    addToTrackList(trackInfo.trackName, trackInfo.image, trackInfo.trackId)
+    addToTrackList(trackInfo.trackName, trackInfo.image, trackInfo.trackId, trackInfo.artistName)
   }
+
+  
 
   return (
     <div style={{ paddingBottom: "10px" }}>
@@ -85,7 +101,6 @@ const Album: React.FC<AlbumProps> = ({ trackInfo, onClickHandler, accessToken })
             </Button>
             <Button
               className="btn-success albumButton"
-              style={{ padding: "10px" }}
               onClick={handlePreviewClick}
             >
               Preview

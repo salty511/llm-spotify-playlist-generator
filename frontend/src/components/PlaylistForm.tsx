@@ -36,11 +36,9 @@ const PlaylistForm: React.FC<PlaylistFormProps> = ({ onSubmit, loading, error })
           </Form.Text>
         </Form.Group>
         <Button
-          variant="success"
           type="submit"
-          size="lg"
           disabled={loading || !input.trim()}
-          className="w-100"
+          className="w-100 btn btn-success"
         >
           {loading ? 'Generating...' : 'Generate Playlist'}
         </Button>

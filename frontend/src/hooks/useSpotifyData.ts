@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useStore } from '../store/useStore'
+import type { ProcessedTrack, ProcessedArtist } from '../store/useStore'
 
 interface SpotifyTrack {
   id: string;
@@ -13,23 +14,8 @@ interface SpotifyTrack {
   uri: string;
 }
 
-interface ProcessedTrack {
-  albumName: string;
-  trackName: string;
-  artistName: string;
-  image: string | null;
-  trackId: string;
-  previewURL: string | null;
-  uri: string;
-}
-
 interface SpotifyArtist {
   name: string;
-  genres: string[];
-}
-
-interface ProcessedArtist {
-  artistName: string;
   genres: string[];
 }
 
@@ -83,22 +69,11 @@ export const useSpotifyData = () => {
       const data = await response.json()
       
       const processedTracks: ProcessedTrack[] = data.items.map((trackObject: SpotifyTrack) => {
-        const maxTopLine = 22
-        const maxBottomLine = 25
-        
+
         let trackName = trackObject.name
-        if (trackName.length >= maxTopLine) {
-          trackName = trackName.slice(0, maxTopLine - 3) + "..."
-        }
-        
         let albumName = trackObject.album.name
         const artistName = trackObject.artists[0].name
-        if ((artistName + albumName).length >= maxBottomLine) {
-          albumName = albumName.slice(0, (maxBottomLine - artistName.length - 3)) + "..."
-        }
 
-
-        
         return {
           albumName,
           trackName,

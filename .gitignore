@@ -10,8 +10,9 @@ __pycache__/
 .env
 .venv
 
-# Original Project Plan
+# Agent Stuff
 plan.md
+AGENTS.md
 
 # Installer logs
 pip-log.txt
