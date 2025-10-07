@@ -64,7 +64,7 @@ def create_playlist(request: PlaylistRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/scrape", response_class=HTMLResponse)
-def scrape_previews(url: Annotated[Union[str, None], Header()] = None):
+def scrape_previews(url: Annotated[str, Header()]):
     print(url)
     resp = requests.get(url)
     return resp.text
