@@ -1,21 +1,7 @@
 /* Bootstrap-driven base styles (remove Vite defaults that caused layout issues) */
 
-:root {
-  scroll-behavior: smooth;
-}
-
-/* Ensure full-height layout for the app */
-html, body, #root {
-  height: 100%;
-}
-
-/* Defer colors to Bootstrap theme variables (dark or light) */
-body {
-  margin: 0;
-  background-color: var(--bs-body-bg, #121212);
-  color: var(--bs-body-color, #ffffff);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.embed-spotify-player {
+  background-color: #222222 !important;
 }
 
 /* Links follow brand color (Spotify green fallback) */
@@ -23,6 +9,7 @@ a {
   color: var(--bs-link-color, #1db954);
   text-decoration: none;
 }
+
 a:hover {
   color: var(--bs-link-hover-color, #1ed760);
   text-decoration: underline;
@@ -31,23 +18,6 @@ a:hover {
 /* Forms respect dark theme */
 .form-control, .form-select, .form-check-input {
   background-color: var(--bs-form-control-bg, #1a1a1a);
-  color: var(--bs-body-color, #ffffff);
-  border-color: var(--bs-border-color, #333333);
-}
-
-/* Brand the success button as Spotify green */
-.btn-success {
-  background-color: var(--bs-success, #1db954);
-  border-color: var(--bs-success, #1db954);
-}
-.btn-success:hover {
-  background-color: #1ed760;
-  border-color: #1ed760;
-}
-
-/* App wrapper */
-.app-container {
-  min-height: 100%;
 }
 
 /* Custom navbar styling */
@@ -75,5 +45,50 @@ a:hover {
 .navbar.navbar-expand.navbar-custom .btn-outline-danger:hover {
   background-color: #ff4757 !important;
   color: #ffffff !important;
+}
+
+/* Album styles */
+.card-img-top {
+  opacity: 1;
+  transition: 0.5s ease;
+  backface-visibility: hidden;
+}
+
+.preview-button {
+  transition: 0.5s ease;
+  opacity: 0;
+  position: absolute;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.img-preview-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img-preview-button:hover .card-img-top {
+  opacity: 0.3;
+}
+
+.img-preview-button:hover .preview-button {
+  opacity: 1;
+}
+
+.albumButton {
+  cursor: pointer;
+  border-radius: 0;
+}
+
+
+
+/* Ensure Bootstrap success uses Spotify green nicely on dark */
+.btn-success {
+  background-color: var(--bs-success, #1db954);
+  border-color: var(--bs-success, #1db954);
 }
 

@@ -6,13 +6,11 @@ import NavBar from './components/NavBar';
 import { useState } from 'react';
 import { useStore } from './store/useStore';
 import AboutPage from './components/AboutPage';
+import { useSpotifyData } from './hooks/useSpotifyData';
 
 const AppContent: React.FC = () => {
   const { accessToken, setAccessToken } = useStore()
   const [ isInitialized, setIsInitialized ] = useState(false)
-  
-  // Initialize data fetching only after token is set
-  // useSpotifyData()
 
   useEffect(() => {
     // Parse access token from URL on mount
@@ -29,6 +27,9 @@ const AppContent: React.FC = () => {
     }
     setIsInitialized(true)
   }, [accessToken, setAccessToken])
+
+  // Initialize data fetching only after token is set
+  useSpotifyData()
 
   // Don't render anything until we've checked for tokens
   if (!isInitialized) {

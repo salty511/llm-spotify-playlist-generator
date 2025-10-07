@@ -17,6 +17,9 @@ interface storeState {
   
   // Preview URL cache - maps trackId to preview URL
   previewUrlCache: Map<string, string>
+
+  // Current track ID in embed player
+  embedTrackID: string | null
   
   // Actions
   setAccessToken: (token: string) => void
@@ -26,6 +29,7 @@ interface storeState {
   logout: () => void
   setPlayStatus: (status: 'STOPPED' | 'PLAYING' | 'PAUSED') => void
   setPreviewURL: (url: string) => void
+  setEmbedTrackID: (newTrackID: string) => void
   
   // Cache a preview URL for a track
   cachePreviewUrl: (trackId: string, previewUrl: string) => void
@@ -57,14 +61,17 @@ export const useStore = create<storeState>()((set, get) => ({
   
   // Preview URL cache - maps trackId to preview URL
   previewUrlCache: new Map(),
+
+  // Current Track ID in embed player
+  embedTrackID: null,
   
   // Actions
   setAccessToken: (token) => set({ accessToken: token }),
+  setEmbedTrackID: (newTrackID) => set({ embedTrackID: newTrackID }),
   
   setUser: (userData) => set({ user: userData }),
   
   setMusicData: (timeRange, data) => {
-    const state = get()
     switch (timeRange) {
       case 'short_term':
         set({ shortTerm: data })

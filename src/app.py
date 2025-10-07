@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Query, HTTPException
+from fastapi import FastAPI, Query, HTTPException, Header
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -6,6 +6,7 @@ from fastapi.exceptions import RequestValidationError, ValidationException, Fast
 from pydantic import BaseModel
 from main import generate_playlist
 import json
+from typing import Annotated
 
 
 # New imports for Spotify OAuth (Authorization Code flow)
@@ -41,6 +42,10 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 class PlaylistRequest(BaseModel):
     user_input: str | None = None
 
+class ScraperHeaders(BaseModel):
+    Url: str
+
+
 @app.post("/generate_playlist")
 def create_playlist(request: PlaylistRequest):
     try:
@@ -52,6 +57,12 @@ def create_playlist(request: PlaylistRequest):
     except Exception as e:
         print(f"Error generating playlist: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/scrape", response_class=HTMLResponse)
+def scrape_previews(url: Annotated[str | None, Header()] = None):
+    print(url)
+    resp = requests.get(url)
+    return resp.text
 
 
 # =========================
