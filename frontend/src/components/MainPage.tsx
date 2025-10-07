@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Container, Row, Col, Spinner } from 'react-bootstrap';
 import PlaylistForm from './PlaylistForm';
 import ResultsDisplay from './ResultsDisplay';

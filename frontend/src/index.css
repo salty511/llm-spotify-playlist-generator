@@ -4,6 +4,7 @@
   background-color: #222222 !important;
 }
 
+
 /* Links follow brand color (Spotify green fallback) */
 a {
   color: var(--bs-link-color, #1db954);
