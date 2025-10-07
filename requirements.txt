@@ -1,4 +1,4 @@
-python==3.12.3
+python==3.12
 spotipy==2.23.0
 openai==2.1.0
 fastapi==0.104.1
