@@ -8,7 +8,7 @@ import axios from 'axios';
  *  - POST /auth/refresh { refresh_token }
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.VITE_API_URL || 'http://localhost:8000';
 
 export type AuthLoginResponse = {
   auth_url: string;
