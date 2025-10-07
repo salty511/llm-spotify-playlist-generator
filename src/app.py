@@ -22,6 +22,8 @@ print(fastapi.exceptions)
 
 load_dotenv()
 
+print(os.getenv("FRONTEND_URL"))
+
 app = FastAPI(title="LLM Spotify Playlist Generator", description="Generate Spotify playlists using LLMs")
 
 # Add CORS middleware
@@ -31,6 +33,7 @@ app.add_middleware(
         "http://localhost:3000",   # nginx or dockerized frontend
         "http://localhost:5173",   # Vite dev server
         "http://127.0.0.1:5173",   # Vite dev server
+        os.getenv("FRONTEND_URL"),
     ],
     allow_credentials=True,
     allow_methods=["*"],
