@@ -6,8 +6,11 @@ __pycache__/
 # Cache files
 .cache
 
-# Environments
+# Environment Variables
 .env
+.env.dev
+
+# Environments
 .venv
 
 # Agent Stuff
