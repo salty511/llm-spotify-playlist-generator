@@ -1,9 +1,24 @@
-/* Bootstrap-driven base styles (remove Vite defaults that caused layout issues) */
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+// Define custom SCSS variables for reusability (optional)
+$custom-dark-primary: #178a3f; // Spotify green
+$custom-dark-bg: #141414; // Dark background
+$custom-dark-text: #ffffff; // Light text
+
+// Override Bootstrap variables for dark theme
+[data-bs-theme="dark"] {
+  --bs-primary: #{$custom-dark-primary};
+  --bs-body-bg: #{$custom-dark-bg};
+  --bs-body-color: #{$custom-dark-text};
+  --bs-secondary: #6c757d; // Example secondary color
+  --bs-success: #{$custom-dark-primary}; // Reuse for success
+  // Add more as needed, e.g., --bs-danger, --bs-warning, etc.
+}
+
 
 .embed-spotify-player {
   background-color: #222222 !important;
 }
-
 
 /* Links follow brand color (Spotify green fallback) */
 a {
@@ -92,4 +107,3 @@ a:hover {
   background-color: var(--bs-success, #1db954);
   border-color: var(--bs-success, #1db954);
 }
-
