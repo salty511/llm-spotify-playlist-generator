@@ -155,7 +155,7 @@ const MainPage: React.FC = () => {
             {loading && (
               <div className="text-center mt-4">
                 <Spinner animation="border" variant="success" />
-                <p className="mt-2 text-muted">Generating your playlist...</p>
+                <p className="mt-2 text-muted">Generating your playlist, this may take a few minutes...</p>
               </div>
             )}
           

@@ -12,7 +12,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result }) => {
   console.log(result);
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 pb-5" style={{maxWidth: '70%'}}>
       <Card className="shadow-sm">
         <Card.Header className="bg-success text-white">
           <h3 className="mb-0">Your Generated Playlist</h3>

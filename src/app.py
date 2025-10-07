@@ -53,9 +53,13 @@ def create_playlist(request: PlaylistRequest):
     try:
         trackList = json.loads(request.user_track_list)
         description, tracks = generate_playlist(request.user_prompt, trackList, model)
-        if(model == 'gpt-5'):
+        if(tracks.output[1].content):
             tracks = json.loads(tracks.output[1].content[0].text)
             return {"description": description.output[1].content[0].text, "tracks": tracks}
+        elif(tracks.output[0].content):
+            tracks = json.loads(tracks.output[0].content[0].text)
+            return {"description": description.output[0].content[0].text, "tracks": tracks}
+
     except Exception as e:
         print(f"Error generating playlist: {e}")
         raise HTTPException(status_code=500, detail=str(e))
