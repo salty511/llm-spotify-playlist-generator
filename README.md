@@ -2,6 +2,10 @@
 
 A web application that generates personalized Spotify playlists using Large Language Models (LLMs) based on natural language descriptions provided by users.
 
+<a href="https://frontend-production-b573.up.railway.app/" target="_blank">
+  <img src="https://img.shields.io/badge/Live%20Demo-Railway-red?style=flat-square&logo=netlify&logoSize=auto" alt="Live Demo Badge"  class="border-none">
+</a>
+
 ## Overview
 
 The application allows users to describe their desired playlist in plain English (e.g., "upbeat workout music" or "chill vibes for studying"). It leverages OpenAI's GPT models to interpret the input, generate a playlist description, and suggest relevant tracks by querying the Spotify Web API. The results are presented through a modern React-based web interface with Spotify OAuth integration.
