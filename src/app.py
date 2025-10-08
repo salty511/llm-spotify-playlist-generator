@@ -22,7 +22,7 @@ print(fastapi.exceptions)
 
 load_dotenv()
 
-print(os.getenv("FRONTEND_URL"))
+print('FRONTEND_URL: ' + os.getenv("FRONTEND_URL"))
 
 app = FastAPI(title="LLM Spotify Playlist Generator", description="Generate Spotify playlists using LLMs")
 
