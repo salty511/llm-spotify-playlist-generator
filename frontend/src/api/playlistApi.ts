@@ -15,6 +15,7 @@ export interface Track {
 export interface PlaylistResponse {
   description: string | any;
   tracks: Track[];
+  playlist_id?: string;
 }
 
 export interface ProcessedTrackListObj {
@@ -22,7 +23,7 @@ export interface ProcessedTrackListObj {
   artist: string | null
 }
 
-export const generatePlaylist = async (userInput: string, trackList: Map<string, trackIdObject>): Promise<PlaylistResponse> => {
+export const generatePlaylist = async (userInput: string, trackList: Map<string, trackIdObject>, accessToken?: string | null): Promise<PlaylistResponse> => {
   let trackListProcessed = new Map<string, ProcessedTrackListObj>
   trackList.forEach((value, key) => {
     console.log(key, value)
@@ -30,13 +31,19 @@ export const generatePlaylist = async (userInput: string, trackList: Map<string,
   })
   console.log(trackListProcessed)
 
+  const requestBody: any = {
+    user_prompt: userInput,
+    user_track_list: JSON.stringify(Object.fromEntries(trackListProcessed))
+  };
+
+  if (accessToken) {
+    requestBody.access_token = accessToken;
+  }
+
   try {
     const response = await axios.post<PlaylistResponse>(
       `${API_BASE_URL}/generate_playlist`,
-      { user_prompt: userInput,
-        user_track_list: JSON.stringify(Object.fromEntries(trackListProcessed))
-      },
-
+      requestBody,
       {
         headers: {
           'Content-Type': 'application/json',

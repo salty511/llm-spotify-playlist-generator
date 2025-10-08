@@ -45,22 +45,21 @@ app.mount("/static", StaticFiles(directory="static"), name="static") # Legacy
 class PlaylistRequest(BaseModel):
     user_prompt: str
     user_track_list: str
+    access_token: str = None
 
 @app.post("/generate_playlist")
 def create_playlist(request: PlaylistRequest):
-    model = 'gpt-5'
+    model = 'gpt-5-nano'
     try:
         trackList = json.loads(request.user_track_list)
-        description, tracks = generate_playlist(request.user_prompt, trackList, model)
+        description, tracks, playlist_id = generate_playlist(request.user_prompt, trackList, model, request.access_token)
         
-        # Search for correct output array index
-        for i, element in enumerate(tracks.output):
-            if element != None:
-                index=i
+        response = {"description": description, "tracks": tracks}
 
-        tracks = json.loads(tracks.output[index].content[0].text)
-        return {"description": description.output[index].content[0].text, "tracks": tracks}
+        if playlist_id:
+            response["playlist_id"] = playlist_id
 
+        return response
 
     except Exception as e:
         print(f"Error generating playlist: {e}")

@@ -22,6 +22,18 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ result }) => {
           <Card.Text className="fst-italic">
             {result.description}
           </Card.Text>
+          {result.playlist_id && (
+            <div className="mt-3">
+              <a
+                href={`https://open.spotify.com/playlist/${result.playlist_id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-success"
+              >
+                Open Playlist on Spotify
+              </a>
+            </div>
+          )}
         </Card.Body>
         <ListGroup variant="flush">
           <ListGroup.Item className="bg-body-tertiary">

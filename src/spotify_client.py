@@ -23,6 +23,22 @@ class SpotifyClient:
         tracks = results['items']
         return [{'name': track['name'], 'artist': track['artists'][0]['name'], 'uri': track['uri']} for track in tracks]
 
+    def create_playlist(self, access_token, name, description, track_uris):
+        sp = spotipy.Spotify(auth=access_token)
+        user_id = sp.current_user()['id']
+        playlist = sp.user_playlist_create(user_id, name, public=False, description=description)
+        if track_uris:
+            sp.playlist_add_items(playlist['id'], track_uris)
+        return playlist['id']
+
+    def get_track_uri(self, name, artist):
+        query = f"{name} {artist}"
+        results = self.sp.search(q=query, type='track', limit=1)
+        tracks = results['tracks']['items']
+        if tracks:
+            return tracks[0]['uri']
+        return None
+
 # Example usage
 if __name__ == "__main__":
     client = SpotifyClient()

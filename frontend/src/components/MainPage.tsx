@@ -104,7 +104,7 @@ const MainPage: React.FC = () => {
     console.log(genres)
 
     try {
-      const playlistResult = await generatePlaylist(userInput, trackList);
+      const playlistResult = await generatePlaylist(userInput, trackList, accessToken);
       setResult(playlistResult);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');
