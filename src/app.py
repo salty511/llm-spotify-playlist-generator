@@ -49,7 +49,7 @@ class PlaylistRequest(BaseModel):
 
 @app.post("/generate_playlist")
 def create_playlist(request: PlaylistRequest):
-    model = 'gpt-5-nano'
+    model = os.getenv('MODEL') | 'gpt-5-nano'
     try:
         trackList = json.loads(request.user_track_list)
         description, tracks, playlist_id = generate_playlist(request.user_prompt, trackList, model, request.access_token)
