@@ -1,35 +1,35 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LoginPage from './components/LoginPage';
-import MainPage from './components/MainPage';
-import NavBar from './components/NavBar';
-import { useState } from 'react';
-import { useStore } from './store/useStore';
-import AboutPage from './components/AboutPage';
-import { useSpotifyData } from './hooks/useSpotifyData';
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginPage from "./components/LoginPage";
+import MainPage from "./components/MainPage";
+import NavBar from "./components/NavBar";
+import { useState } from "react";
+import { useStore } from "./store/useStore";
+import AboutPage from "./components/AboutPage";
+import { useSpotifyData } from "./hooks/useSpotifyData";
 
 const AppContent: React.FC = () => {
-  const { accessToken, setAccessToken } = useStore()
-  const [ isInitialized, setIsInitialized ] = useState(false)
+  const { accessToken, setAccessToken } = useStore();
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     // Parse access token from URL on mount
     const hash = window.location.hash.substring(1); // Remove the '#' character
     const params = new URLSearchParams(hash);
-		const parsed = params.get('access_token');
-    console.log(parsed)
+    const parsed = params.get("access_token");
+    console.log(parsed);
 
     if (parsed !== null && accessToken === null) {
-      console.log('Setting access token from URL')
-      setAccessToken(parsed)
+      console.log("Setting access token from URL");
+      setAccessToken(parsed);
       // Clean up the URL after setting the token
-      window.history.replaceState({}, document.title, window.location.pathname)
+      window.history.replaceState({}, document.title, window.location.pathname);
     }
-    setIsInitialized(true)
-  }, [accessToken, setAccessToken])
+    setIsInitialized(true);
+  }, [accessToken, setAccessToken]);
 
   // Initialize data fetching only after token is set
-  useSpotifyData()
+  useSpotifyData();
 
   // Don't render anything until we've checked for tokens
   if (!isInitialized) {
@@ -42,7 +42,7 @@ const AppContent: React.FC = () => {
           <p className="mt-3">Initializing...</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -50,29 +50,17 @@ const AppContent: React.FC = () => {
       <NavBar />
       <Routes>
         {/* Main route */}
-        <Route 
-            path="/" 
-            element={
-              accessToken ? (
-                <MainPage />
-              ) : (
-                <LoginPage />
-              )
-            }
-          />
+        <Route path="/" element={accessToken ? <MainPage /> : <LoginPage />} />
         {/* About route */}
         <Route path="/about" element={<AboutPage />} />
         {/* Fallback route */}
       </Routes>
     </Router>
-  )
-}
-
+  );
+};
 
 function App() {
-  return (
-    <AppContent />
-  );
+  return <AppContent />;
 }
 
 export default App;

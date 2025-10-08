@@ -1,42 +1,156 @@
 # LLM Spotify Playlist Generator
 
-A project to generate Spotify playlists using Large Language Models (LLMs) based on user descriptions.
+A web application that generates personalized Spotify playlists using Large Language Models (LLMs) based on natural language descriptions provided by users.
 
 ## Overview
-The application allows users to input natural language descriptions of desired playlists (e.g., "upbeat workout music" or "chill vibes for studying"). It leverages OpenAI's GPT models to interpret the input and generate a playlist description, then queries the Spotify API to find matching tracks. The results are presented through a simple web interface.
+
+The application allows users to describe their desired playlist in plain English (e.g., "upbeat workout music" or "chill vibes for studying"). It leverages OpenAI's GPT models to interpret the input, generate a playlist description, and suggest relevant tracks by querying the Spotify Web API. The results are presented through a modern React-based web interface with Spotify OAuth integration.
 
 ### How It Works
-1. **User Input**: Enter a playlist theme via the web interface at `http://localhost:8000`
-2. **LLM Processing**: The input is sent to an LLM (OpenAI GPT-3.5) to generate a playlist description and theme interpretation
-3. **Spotify Search**: The Spotify Web API is queried for tracks matching the theme
-4. **Track Selection**: The LLM suggests relevant tracks from the search results
-5. **Display Results**: Playlist description and suggested tracks are shown to the user
 
-## Features
-- Natural language playlist generation
-- Spotify API integration for track search
-- LLM-powered track suggestions and descriptions
-- Web interface with real-time generation
-- Docker containerization for easy deployment
-- REST API for programmatic access
+1. **User Authentication**: Users log in via Spotify OAuth to access their Spotify account.
+2. **Input Description**: Enter a natural language description of the desired playlist.
+3. **Track List UI**: Users top tracks are displayed and user can add seed tracks to the playlist
+4. **LLM Processing**: The input is processed by an LLM to generate a detailed playlist theme and track suggestions.
+5. **Playlist Creation**: The generated playlist is displayed with options to save to Spotify.
+
+## Architecture
+
+### Frontend
+
+- **Framework**: React 19 with TypeScript
+- **Styling**: Bootstrap 5.3, React Bootstrap, SASS
+- **State Management**: Zustand
+- **Routing**: React Router DOM
+- **API Communication**: Axios for backend calls
+- **Components**: Modular components in `frontend/src/components`
+- **API Helpers**: Helper functions in `frontend/src/api`
+
+### Backend
+
+- **Framework**: Python FastAPI with Pydantic for request validation
+- **Endpoints**:
+  - `/generate_playlist`: Main endpoint for playlist generation (calls `generate_playlist` in `src/main.py`)
+  - `/scrape`: Middleware for scraping Spotify preview URLs
+  - `/auth/*`: OAuth endpoints for Spotify authentication
+- **LLM Integration**: `src/llm_client.py` handles OpenAI API interactions
+- **Spotify Client**: `src/spotify_client.py` manages Spotify API calls
 
 ## Setup
-1. Clone the repository
-2. Install dependencies: `pip install -r requirements.txt`
-3. Set up environment variables in `.env` (Spotify client ID/secret and OpenAI API key)
-4. Run the app: `python src/app.py` or use Docker: `docker-compose up`
+
+### Prerequisites
+
+- Python 3.8+
+- Node.js 16+
+- Docker and Docker Compose (optional, for containerized deployment)
+- Spotify Developer Account (for app credentials)
+- OpenAI API Key
+
+### Installation
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/your-username/llm-spotify-playlist-generator.git
+   cd llm-spotify-playlist-generator
+   ```
+
+2. **Backend Setup**:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Frontend Setup**:
+
+   ```bash
+   cd frontend
+   npm install
+   cd ..
+   ```
+
+4. **Environment Variables**:
+   Create a `.env` file in the root directory with:
+   ```
+   SPOTIFY_CLIENT_ID=your_spotify_client_id
+   SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+   OPENAI_API_KEY=your_openai_api_key
+   FRONTEND_URL=http://localhost:5173
+   ```
+   Create a `.env` in the frontend directory with:
+   ```
+   VITE_API_URL=http://localhost:8000
+   ```
+
+### Running the Application
+
+#### Using Docker
+
+```bash
+docker-compose up --build
+```
+
+- Frontend: http://localhost:5173
+- Backend: http://localhost:8000
+
+#### Manual Setup
+
+1. **Start Backend**:
+
+   ```bash
+   python src/app.py
+   ```
+
+   Backend runs on http://localhost:8000
+
+2. **Start Frontend** (in a new terminal):
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+   Frontend runs on http://localhost:5173
 
 ## Usage
-- **Web Interface**: Visit `http://localhost:8000` for the interactive frontend
-- **CLI**: Run `python src/main.py` for command-line usage
-- **API**: POST to `/generate_playlist` with JSON `{"user_input": "your theme"}`
+
+1. Open the frontend at http://localhost:5173
+2. Click "Login with Spotify" to authenticate
+3. Enter a playlist description (e.g., "energetic pop songs for a road trip")
+4. Click "Generate Playlist"
+5. Review the suggested tracks and playlist description
+6. Optionally save the playlist to your Spotify account
+
+### API Usage
+
+You can also interact with the backend API directly:
+
+```bash
+curl -X POST "http://localhost:8000/generate_playlist" \
+     -H "Content-Type: application/json" \
+     -d '{"user_input": "chill study music"}'
+```
 
 ## Project Structure
-- `src/`: Core application code (API, clients, main logic)
-- `static/`: Frontend HTML, CSS, and JavaScript
-- `tests/`: Unit tests
-- `docs/`: Documentation
-- `config/`: Configuration files
 
-## Contributing
-See plan.md for detailed project plan and future enhancements.
+```
+.
+├── frontend/                # React TypeScript frontend
+│   ├── src/
+│   │   ├── components/      # React components
+│   │   ├── api/             # API helper functions
+│   │   ├── hooks/           # Custom React hooks
+│   │   ├── store/           # Zustand state management
+│   │   └── assets/          # Static assets
+│   ├── public/              # Public static files
+│   ├── package.json         # Frontend dependencies
+│   └── vite.config.ts       # Vite configuration
+├── src/                     # Python backend
+│   ├── app.py               # FastAPI server
+│   ├── main.py              # Playlist generation logic
+│   ├── llm_client.py        # OpenAI LLM client
+│   └── spotify_client.py    # Spotify API client
+├── static/                  # Legacy static files (if any)
+├── docker-compose.yml       # Docker Compose configuration
+├── Dockerfile               # Backend Docker configuration
+├── requirements.txt         # Python dependencies
+└── README.md                # This file
+```
