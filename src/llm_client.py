@@ -1,6 +1,5 @@
 from openai import OpenAI
 import os
-import textwrap
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -18,46 +17,49 @@ class LLMClient:
 		return output
 
 	def generate_playlist_description(self, user_input, user_track_list=None):
-		promptDesc = f"""Generate a playlist description based on: {user_input}
-				The description will be used as a prompt to generate a playlist for Spotify.
-				Make it a simple paragraph, no more than 100 words.
-				Output the description only, no other text.
-				"""
 		if user_track_list:
-			promptTracks = f'\nUse these tracks as inspiration:\n'
+			promptTracks = ""
 			for trackObj in user_track_list.values():
 				promptTracks += f"Track: {trackObj['name']} - Artist: {trackObj['artist']}\n"
 
-			prompt = self.textWrapper(promptDesc) + self.textWrapper(promptTracks)	
-		else:
-			prompt = self.textWrapper(promptDesc)
-		
+			promptTracks = self.textWrapper(promptTracks)	
+
+		# Reusable prompt defined in OpenAI Dashboard
 		response = self.client.responses.create(model=self.model,
-		input=prompt,
-		max_output_tokens=1000000)
+			prompt={
+				"id": "pmpt_68e654af374081949cb3f2f895b057390461405fb9fe7617",
+				"version": "2",
+				"variables": {
+				"user_input": user_input,
+				"tracks": promptTracks
+				}
+			},
+			max_output_tokens=1000000
+		)
 		return response
 
 	def suggest_tracks(self, description, user_track_list=None):
-		promptDesc = f"""Based on this description: {description}
-				Generate a playlist for Spotify of 30 songs.
-				Structure the response as a JSON array of objects with 'name' and 'artist' fields.
-				Output the JSON array only, no other text.
-			"""
+		
 		if user_track_list:
-			promptTracks = f'Use these tracks as inspiration and include them in the final playlist:\n'
+			promptTracks = ""
 			for trackObj in user_track_list.values():
 				promptTracks += f"Track: {trackObj['name']} - Artist: {trackObj['artist']}\n"
 
-			prompt = self.textWrapper(promptDesc) + self.textWrapper(promptTracks)	
-		else:
-			prompt = self.textWrapper(promptDesc)
+		promptTracks = self.textWrapper(promptTracks)
+
 
 		print(self.model)
-
-		prompt = self.textWrapper(promptDesc) + self.textWrapper(promptTracks)
 		response = self.client.responses.create(model=self.model,
-		input=prompt,
-		max_output_tokens=1000000)
+			prompt={
+				"id": "pmpt_68e65207a4488190a23c631ce0a9d1500129f091d76c03ed",
+				"version": "4",
+				"variables": {
+				"desc": description,
+				"tracks": promptTracks
+				}
+			},
+			max_output_tokens=1000000
+		)
 		return response
 	
 	

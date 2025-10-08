@@ -26,7 +26,7 @@ class SpotifyClient:
     def create_playlist(self, access_token, name, description, track_uris):
         sp = spotipy.Spotify(auth=access_token)
         user_id = sp.current_user()['id']
-        playlist = sp.user_playlist_create(user_id, name, public=False, description=description)
+        playlist = sp.user_playlist_create(user_id, name, public=False, description=description[:100])
         if track_uris:
             sp.playlist_add_items(playlist['id'], track_uris)
         return playlist['id']

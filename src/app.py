@@ -22,9 +22,10 @@ print(fastapi.exceptions)
 
 load_dotenv()
 
-print('FRONTEND_URL: ' + os.getenv("FRONTEND_URL"))
-
 app = FastAPI(title="LLM Spotify Playlist Generator", description="Generate Spotify playlists using LLMs")
+
+frontend_url = os.getenv("FRONTEND_URL")
+print(frontend_url)
 
 # Add CORS middleware
 app.add_middleware(
@@ -33,7 +34,8 @@ app.add_middleware(
         "http://localhost:3000",   # nginx or dockerized frontend
         "http://localhost:5173",   # Vite dev server
         "http://127.0.0.1:5173",   # Vite dev server
-        os.getenv("FRONTEND_URL"),
+        frontend_url, # Railway frontend
+        f"{frontend_url}/*"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -49,7 +51,7 @@ class PlaylistRequest(BaseModel):
 
 @app.post("/generate_playlist")
 def create_playlist(request: PlaylistRequest):
-    model = os.getenv('MODEL') | 'gpt-5-nano'
+    model = os.getenv('MODEL') or 'gpt-5-mini'
     try:
         trackList = json.loads(request.user_track_list)
         description, tracks, playlist_id = generate_playlist(request.user_prompt, trackList, model, request.access_token)
