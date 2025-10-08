@@ -39,7 +39,7 @@ class LLMClient:
 
 	def suggest_tracks(self, description, user_track_list=None):
 		promptDesc = f"""Based on this description: {description}
-				Generate a playlist for Spotify of 10 songs.
+				Generate a playlist for Spotify of 30 songs.
 				Structure the response as a JSON array of objects with 'name' and 'artist' fields.
 				Output the JSON array only, no other text.
 			"""
