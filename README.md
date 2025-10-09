@@ -37,8 +37,8 @@ The application allows users to describe their desired playlist in plain English
   - `/generate_playlist`: Main endpoint for playlist generation (calls `generate_playlist` in `src/main.py`)
   - `/scrape`: Middleware for scraping Spotify preview URLs
   - `/auth/*`: OAuth endpoints for Spotify authentication
-- **LLM Integration**: `src/llm_client.py` handles OpenAI API interactions
-- **Spotify Client**: `src/spotify_client.py` manages Spotify API calls
+- **LLM Integration**: `src/llm_client.py` Handles OpenAI API interactions
+- **Spotify Client**: `src/spotify_client.py` Manages Spotify API calls
 
 ## Setup
 
