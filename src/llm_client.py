@@ -23,6 +23,7 @@ class LLMClient:
 				promptTracks += f"Track: {trackObj['name']} - Artist: {trackObj['artist']}\n"
 
 			promptTracks = self.textWrapper(promptTracks)	
+		else: promptTracks = ""
 
 		# Reusable prompt defined in OpenAI Dashboard
 		response = self.client.responses.create(model=self.model,
@@ -45,7 +46,9 @@ class LLMClient:
 			for trackObj in user_track_list.values():
 				promptTracks += f"Track: {trackObj['name']} - Artist: {trackObj['artist']}\n"
 
-		promptTracks = self.textWrapper(promptTracks)
+			promptTracks = self.textWrapper(promptTracks)
+		else:
+			promptTracks = ""
 
 
 		print(self.model)

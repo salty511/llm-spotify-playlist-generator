@@ -31,7 +31,9 @@ a:hover {
 }
 
 /* Forms respect dark theme */
-.form-control, .form-select, .form-check-input {
+.form-control,
+.form-select,
+.form-check-input {
   background-color: var(--bs-form-control-bg, #1a1a1a);
 }
 
@@ -91,7 +93,6 @@ a:hover {
 }
 .albumButton {
   cursor: pointer;
-
 }
 .remove-icon {
   cursor: pointer;
