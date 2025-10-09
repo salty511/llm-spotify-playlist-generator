@@ -32,11 +32,24 @@ class SpotifyClient:
         return playlist['id']
 
     def get_track_uri(self, name, artist):
-        query = f"{name} {artist}"
+        query = f"track:{name} artist:{artist}"
         results = self.sp.search(q=query, type='track', limit=1)
+        print(f'Searching for track {name} - {artist}\n')
         tracks = results['tracks']['items']
+        
         if tracks:
-            return tracks[0]['uri']
+            # Validation for queries with multi track responses - match names or artists directly to input values
+            for track in tracks:
+                print(f'Found track {track['name']} - {track['artists']}\n')
+                if track['name'] == name:
+                    return track['uri']
+                else: 
+                    for search_artist in track['artists']:
+                        if search_artist == artist:
+                            return track['uri']
+            print(f'Lost {track['name']} - {track['artists']}\n')
+
+        
         return None
 
 # Example usage

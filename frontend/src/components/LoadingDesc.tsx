@@ -10,7 +10,7 @@ const LoadingDesc: React.FC<ResultsLoadingProps> = ({ loading }) => {
 
   useEffect(() => {
     if (percentage < 100 && loading) {
-      setTimeout(() => setPercentage((prev) => (prev += 25)), 20000);
+      setTimeout(() => setPercentage((prev) => (prev += 25)), 15000);
     }
     if (loading === false) {
       setPercentage((prev) => (prev = 0));
@@ -26,10 +26,10 @@ const LoadingDesc: React.FC<ResultsLoadingProps> = ({ loading }) => {
             Generating your playlist, this may take a few minutes
           </p>
           {percentage === 0 && (
-            <p className="mt-2 text-muted">Sending data to backend..</p>
+            <p className="mt-2 text-muted">Sending data to backend...</p>
           )}
           {percentage === 25 && (
-            <p className="mt-2 text-muted">Prompting LLM..</p>
+            <p className="mt-2 text-muted">Prompting LLM...</p>
           )}
           {percentage === 50 && (
             <p className="mt-2 text-muted">

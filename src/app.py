@@ -51,10 +51,9 @@ class PlaylistRequest(BaseModel):
 
 @app.post("/generate_playlist")
 def create_playlist(request: PlaylistRequest):
-    model = os.getenv('MODEL') or 'gpt-5-mini'
     try:
         trackList = json.loads(request.user_track_list)
-        description, tracks, playlist_id = generate_playlist(request.user_prompt, trackList, model, request.access_token)
+        description, tracks, playlist_id = generate_playlist(request.user_prompt, trackList, request.access_token)
         
         response = {"description": description, "tracks": tracks}
 

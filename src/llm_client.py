@@ -4,9 +4,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class LLMClient:
-	def __init__(self, model):
+	def __init__(self):
 		self.client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-		self.model = model
 
 	def textWrapper(self, text):
 		output = ''
@@ -26,10 +25,9 @@ class LLMClient:
 		else: promptTracks = ""
 
 		# Reusable prompt defined in OpenAI Dashboard
-		response = self.client.responses.create(model=self.model,
+		response = self.client.responses.create(
 			prompt={
 				"id": "pmpt_68e654af374081949cb3f2f895b057390461405fb9fe7617",
-				"version": "2",
 				"variables": {
 				"user_input": user_input,
 				"tracks": promptTracks
@@ -50,12 +48,9 @@ class LLMClient:
 		else:
 			promptTracks = ""
 
-
-		print(self.model)
-		response = self.client.responses.create(model=self.model,
+		response = self.client.responses.create(
 			prompt={
 				"id": "pmpt_68e65207a4488190a23c631ce0a9d1500129f091d76c03ed",
-				"version": "4",
 				"variables": {
 				"desc": description,
 				"tracks": promptTracks

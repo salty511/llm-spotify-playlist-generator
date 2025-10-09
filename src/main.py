@@ -2,9 +2,9 @@ import json
 from spotify_client import SpotifyClient
 from llm_client import LLMClient
 
-def generate_playlist(user_input, user_track_list=None, model='gpt-5-nano', access_token=None):
+def generate_playlist(user_input, user_track_list=None, access_token=None):
     spotify = SpotifyClient()
-    llm = LLMClient(model)
+    llm = LLMClient()
     
     # Generate description
     description = llm.generate_playlist_description(user_input, user_track_list)
