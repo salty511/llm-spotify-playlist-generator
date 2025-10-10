@@ -10,7 +10,7 @@ const LoadingDesc: React.FC<ResultsLoadingProps> = ({ loading }) => {
 
   useEffect(() => {
     if (percentage < 100 && loading) {
-      setTimeout(() => setPercentage((prev) => (prev += 25)), 15000);
+      setTimeout(() => setPercentage((prev) => (prev += 25)), 10000);
     }
     if (loading === false) {
       setPercentage((prev) => (prev = 0));
