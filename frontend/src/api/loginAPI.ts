@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 /**
  * Client for FastAPI-backed Spotify OAuth (Authorization Code flow).
@@ -8,8 +8,8 @@ import axios from 'axios';
  *  - POST /auth/refresh { refresh_token }
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-console.log(API_BASE_URL)
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+console.log(API_BASE_URL);
 
 export type AuthLoginResponse = {
   auth_url: string;
@@ -46,17 +46,23 @@ export function redirectToLogin(): void {
 /**
  * Helper to extract "code" and "state" query params from the current URL after redirect back.
  */
-export function getCodeFromRedirectUrl(): { code: string | null; state: string | null } {
+export function getCodeFromRedirectUrl(): {
+  code: string | null;
+  state: string | null;
+} {
   const params = new URLSearchParams(window.location.search);
-  const code = params.get('code');
-  const state = params.get('state');
+  const code = params.get("code");
+  const state = params.get("state");
   return { code, state };
 }
 
 /**
  * Exchange authorization code for tokens via backend.
  */
-export async function exchangeCodeForToken(code: string, state?: string | null): Promise<TokenResponse> {
+export async function exchangeCodeForToken(
+  code: string,
+  state?: string | null
+): Promise<TokenResponse> {
   const res = await axios.get<TokenResponse>(`${API_BASE_URL}/auth/callback`, {
     params: { code, state },
   });
@@ -66,7 +72,11 @@ export async function exchangeCodeForToken(code: string, state?: string | null):
 /**
  * Refresh access token using a refresh token via backend.
  */
-export async function refreshAccessToken(refresh_token: string): Promise<TokenResponse> {
-  const res = await axios.post<TokenResponse>(`${API_BASE_URL}/auth/refresh`, { refresh_token });
+export async function refreshAccessToken(
+  refresh_token: string
+): Promise<TokenResponse> {
+  const res = await axios.post<TokenResponse>(`${API_BASE_URL}/auth/refresh`, {
+    refresh_token,
+  });
   return res.data;
 }

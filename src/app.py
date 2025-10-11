@@ -18,11 +18,15 @@ from urllib.parse import urlencode
 from dotenv import load_dotenv
 
 import fastapi.exceptions
+
 print(fastapi.exceptions)
 
 load_dotenv()
 
-app = FastAPI(title="LLM Spotify Playlist Generator", description="Generate Spotify playlists using LLMs")
+app = FastAPI(
+    title="LLM Spotify Playlist Generator",
+    description="Generate Spotify playlists using LLMs",
+)
 
 frontend_url = os.getenv("FRONTEND_URL")
 print(frontend_url)
@@ -31,30 +35,34 @@ print(frontend_url)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",   # nginx or dockerized frontend
-        "http://localhost:5173",   # Vite dev server
-        "http://127.0.0.1:5173",   # Vite dev server
-        frontend_url, # Railway frontend
-        f"{frontend_url}/*"
+        "http://localhost:3000",  # nginx or dockerized frontend
+        "http://localhost:5173",  # Vite dev server
+        "http://127.0.0.1:5173",  # Vite dev server
+        frontend_url,  # Railway frontend
+        f"{frontend_url}/*",
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.mount("/static", StaticFiles(directory="static"), name="static") # Legacy 
+app.mount("/static", StaticFiles(directory="static"), name="static")  # Legacy
+
 
 class PlaylistRequest(BaseModel):
     user_prompt: str
     user_track_list: str
     access_token: str = None
 
+
 @app.post("/generate_playlist")
 def create_playlist(request: PlaylistRequest):
     try:
         trackList = json.loads(request.user_track_list)
-        description, tracks, playlist_id = generate_playlist(request.user_prompt, trackList, request.access_token)
-        
+        description, tracks, playlist_id = generate_playlist(
+            request.user_prompt, trackList, request.access_token
+        )
+
         response = {"description": description, "tracks": tracks}
 
         if playlist_id:
@@ -65,6 +73,7 @@ def create_playlist(request: PlaylistRequest):
     except Exception as e:
         print(f"Error generating playlist: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/scrape", response_class=HTMLResponse)
 def scrape_previews(url: Annotated[str, Header()]):
@@ -79,7 +88,9 @@ def scrape_previews(url: Annotated[str, Header()]):
 
 SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID", "")
 SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET", "")
-SPOTIFY_REDIRECT_URI = os.getenv("SPOTIFY_REDIRECT_URI", "http://localhost:8000/auth/callback")
+SPOTIFY_REDIRECT_URI = os.getenv(
+    "SPOTIFY_REDIRECT_URI", "http://localhost:8000/auth/callback"
+)
 
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
 SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"
@@ -87,19 +98,30 @@ SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"
 # Minimum scopes to replicate typical login + personalization use-cases; adjust as needed
 SPOTIFY_SCOPES = "user-top-read playlist-modify-private playlist-modify-public"
 
+
 def _basic_auth_header(client_id: str, client_secret: str) -> str:
     creds = f"{client_id}:{client_secret}".encode("utf-8")
     return base64.b64encode(creds).decode("utf-8")
 
+
 @app.get("/auth/login")
-def auth_login(redirect: bool = Query(default=False, description="If true, respond with a 302 redirect to Spotify")):
+def auth_login(
+    redirect: bool = Query(
+        default=False, description="If true, respond with a 302 redirect to Spotify"
+    )
+):
     """
     Generate Spotify authorization URL (Authorization Code flow).
     - If redirect=false: returns JSON { auth_url, state } so the frontend can window.location to it
     - If redirect=true: responds with 302 Redirect to Spotify auth page
     """
     if not SPOTIFY_CLIENT_ID or not SPOTIFY_REDIRECT_URI:
-        return JSONResponse(status_code=500, content={"detail": "Spotify OAuth is not configured. Check environment variables."})
+        return JSONResponse(
+            status_code=500,
+            content={
+                "detail": "Spotify OAuth is not configured. Check environment variables."
+            },
+        )
 
     state = secrets.token_urlsafe(16)
     params = {
@@ -116,12 +138,14 @@ def auth_login(redirect: bool = Query(default=False, description="If true, respo
         return RedirectResponse(url=auth_url, status_code=302)
     return {"auth_url": auth_url, "state": state}
 
+
 class AuthCallbackResponse(BaseModel):
     access_token: str
     token_type: str
     expires_in: int
     refresh_token: str | None = None
     scope: str | None = None
+
 
 @app.get("/auth/callback")
 def auth_callback(code: str, state: str | None = None):
@@ -130,7 +154,12 @@ def auth_callback(code: str, state: str | None = None):
     Redirects to frontend with tokens in URL fragment for security.
     """
     if not SPOTIFY_CLIENT_ID or not SPOTIFY_CLIENT_SECRET or not SPOTIFY_REDIRECT_URI:
-        return JSONResponse(status_code=500, content={"detail": "Spotify OAuth is not configured. Check environment variables."})
+        return JSONResponse(
+            status_code=500,
+            content={
+                "detail": "Spotify OAuth is not configured. Check environment variables."
+            },
+        )
 
     headers = {
         "Authorization": f"Basic {_basic_auth_header(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET)}",
@@ -147,7 +176,9 @@ def auth_callback(code: str, state: str | None = None):
     if resp.status_code != 200:
         # Redirect to frontend with error
         frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
-        return RedirectResponse(url=f"{frontend_url}/auth/error?error=oauth_failed", status_code=302)
+        return RedirectResponse(
+            url=f"{frontend_url}/auth/error?error=oauth_failed", status_code=302
+        )
 
     token_json = resp.json()
 
@@ -163,8 +194,10 @@ def auth_callback(code: str, state: str | None = None):
     query_string = "&".join(f"{k}={v}" for k, v in params.items() if v)
     return RedirectResponse(url=f"{frontend_url}/#{query_string}", status_code=302)
 
+
 class RefreshRequest(BaseModel):
     refresh_token: str
+
 
 @app.post("/auth/refresh", response_model=AuthCallbackResponse)
 def auth_refresh(request: RefreshRequest):
@@ -173,7 +206,12 @@ def auth_refresh(request: RefreshRequest):
     Returns new access_token (and possibly a new refresh_token).
     """
     if not SPOTIFY_CLIENT_ID or not SPOTIFY_CLIENT_SECRET:
-        return JSONResponse(status_code=500, content={"detail": "Spotify OAuth is not configured. Check environment variables."})
+        return JSONResponse(
+            status_code=500,
+            content={
+                "detail": "Spotify OAuth is not configured. Check environment variables."
+            },
+        )
 
     headers = {
         "Authorization": f"Basic {_basic_auth_header(SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET)}",
@@ -188,11 +226,14 @@ def auth_refresh(request: RefreshRequest):
         return JSONResponse(status_code=resp.status_code, content={"detail": resp.text})
     return resp.json()
 
+
 @app.get("/", response_class=HTMLResponse)
 def read_root():
     with open("static/index.html") as f:
         return f.read()
 
+
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)

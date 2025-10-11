@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
+import React, { useState } from "react";
+import { Form, Button, Alert } from "react-bootstrap";
 
 interface PlaylistFormProps {
   onSubmit: (input: string) => void;
@@ -7,8 +7,12 @@ interface PlaylistFormProps {
   error: string | null;
 }
 
-const PlaylistForm: React.FC<PlaylistFormProps> = ({ onSubmit, loading, error }) => {
-  const [input, setInput] = useState('');
+const PlaylistForm: React.FC<PlaylistFormProps> = ({
+  onSubmit,
+  loading,
+  error,
+}) => {
+  const [input, setInput] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +44,7 @@ const PlaylistForm: React.FC<PlaylistFormProps> = ({ onSubmit, loading, error })
           disabled={loading || !input.trim()}
           className="w-100 btn btn-success"
         >
-          {loading ? 'Generating...' : 'Generate Playlist'}
+          {loading ? "Generating..." : "Generate Playlist"}
         </Button>
       </Form>
       {error && (

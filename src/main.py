@@ -2,10 +2,11 @@ import json
 from spotify_client import SpotifyClient
 from llm_client import LLMClient
 
+
 def generate_playlist(user_input, user_track_list=None, access_token=None):
     spotify = SpotifyClient()
     llm = LLMClient()
-    
+
     # Generate description
     description = llm.generate_playlist_description(user_input, user_track_list)
 
@@ -13,12 +14,12 @@ def generate_playlist(user_input, user_track_list=None, access_token=None):
     # Start with high value to act as a case where no elemenets reach the if statement
     index_desc = 100
     for i, element in enumerate(description.output):
-            if element.content is not None:
-                print(element)
-                index_desc=i
-                break
+        if element.content is not None:
+            print(element)
+            index_desc = i
+            break
     if index_desc == 100:
-        description = 'No output from model'
+        description = "No output from model"
     else:
         description = description.output[index_desc].content[0].text
         print(f"Playlist Description: {description}")
@@ -34,7 +35,7 @@ def generate_playlist(user_input, user_track_list=None, access_token=None):
             break
 
     if index_tracks == 100:
-        tracks = 'No output from model'
+        tracks = "No output from model"
         track_uris = []
     else:
         tracks_json = suggestions.output[index_tracks].content[0].text
@@ -45,20 +46,27 @@ def generate_playlist(user_input, user_track_list=None, access_token=None):
         track_uris = []
         filtered_tracks = []
         for track in tracks:
-            uri = spotify.get_track_uri(track['name'], track['artist'])
+            uri = spotify.get_track_uri(track["name"], track["artist"])
             if uri:
                 track_uris.append(uri)
-                track['uri'] = uri  # Add URI to track object
+                track["uri"] = uri  # Add URI to track object
                 filtered_tracks.append(track)
         tracks = filtered_tracks
-    
+
     playlist_id = None
     if access_token and track_uris:
-        description_text = description if isinstance(description, str) else description.output[index_desc].content[0].text
-        playlist_id = spotify.create_playlist(access_token, user_input, description_text, track_uris)
-    
+        description_text = (
+            description
+            if isinstance(description, str)
+            else description.output[index_desc].content[0].text
+        )
+        playlist_id = spotify.create_playlist(
+            access_token, user_input, description_text, track_uris
+        )
+
     return description, tracks, playlist_id
+
 
 if __name__ == "__main__":
     user_input = input("Enter playlist theme: ")
-    generate_playlist(user_input)   
+    generate_playlist(user_input)
